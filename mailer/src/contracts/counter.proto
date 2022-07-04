@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+service CounterService {
+    rpc Add (Empty) returns (Counter) {}
+}
+
+message Empty {}
+
+message Counter {
+    int32 counter = 1;
+}
