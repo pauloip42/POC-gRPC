@@ -1,15 +1,19 @@
 function setCounter(){
     const grpc = require('@grpc/grpc-js');
     const protoLoader = require('@grpc/proto-loader');
-    const path = require('path');
+    // const path = require('path');
     
-    const protoObjetc = protoLoader.loadSync(path.resolve(__dirname, '../contracts/counter.proto'));
+    const protoObjetc = protoLoader.loadSync('./src/contracts/counter.proto');
+    // console.log(path.resolve(__dirname, './contracts/counter.proto'));
     const CounterClient = grpc.loadPackageDefinition(protoObjetc);
 
-    const counter = new CounterClient.CounterService('localhost:50051', grpc.credentials.createInsecure());
+    const counter = new CounterClient.CounterService('counter:50051', grpc.credentials.createInsecure());
 
-    counter.add({}, (err, count) => {
-        // if(err) throw err;
+    counter.Add({}, (err, count) => {
+        if(err){
+            console.log(err);
+            throw err;
+        };
         console.log("Contador: ", count);
     })
 };

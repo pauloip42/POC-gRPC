@@ -4,18 +4,19 @@ const server = new grpc.Server();
 
 var counter = 0;
 
-async function addCount() {
+function addCount() {
     counter = counter + 1;
     return counter;
 }
 
 server.addService(countProto.CounterService.service, {
-    add: (_, callback) => {
-        let count = await addCount();
+    Add: (_, callback) => {
+        let count = addCount();
         callback(null, count);
     }
 });
 
-server.bind('127.0.0.1:50051', grpc.ServerCredentials.createInsecure());
-console.log('Server running at 127.0.0.1:50051');
-server.start();
+server.bindAsync('counter:50051', grpc.ServerCredentials.createInsecure(), () => {
+    server.start();
+    console.log('Server running at 127.0.0.1:50051');
+});
